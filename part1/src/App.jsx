@@ -1,58 +1,100 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
+import { useState } from 'react'
 
-// function App() {
-//   const [count, setCount] = useState(0)
-
-//   return (
-//     <>
-//       <div>
-//         <a href="https://vite.dev" target="_blank">
-//           <img src={viteLogo} className="logo" alt="Vite logo" />
-//         </a>
-//         <a href="https://react.dev" target="_blank">
-//           <img src={reactLogo} className="logo react" alt="React logo" />
-//         </a>
-//       </div>
-//       <h1>Vite + React</h1>
-//       <div className="card">
-//         <button onClick={() => setCount((count) => count + 1)}>
-//           count is {count}
-//         </button>
-//         <p>
-//           Edit <code>src/App.jsx</code> and save to test HMR
-//         </p>
-//       </div>
-//       <p className="read-the-docs">
-//         Click on the Vite and React logos to learn more
-//       </p>
-//     </>
-//   )
-// }
-
-// export default App
+const Display = props => <h1>{props.value}</h1>
 
 
-const App = () => {
-  const course = 'Half Stack application development'
+const StatisticLine=({text,value})=>(
+  <p>
+    {text} {value}
+  </p>
+);
 
+const Statistics = ({good,neutral,bad}) => {
+  const all = good + neutral + bad;
+  const average = all === 0 ? 0 : ((good - bad) / all).toFixed(2);
+  const positive = all === 0 ? "0%" : ((good / all) * 100).toFixed(2) + "%";
+  
   return (
     <div>
-      <h1>{course}</h1>
-      <p>
-        {'Fundamentals of React'} {10}
-      </p>
-      <p>
-        {'Using props to pass data'} {7}
-      </p>
-      <p>
-        {'State of a component'} {14}
-      </p>
-      <p>Number of exercises {10+7+14}</p>
+      <Display value="Statistics" />
+      {all === 0 ? (
+        <p>No feedback given</p>
+      ) : (
+        <div>
+          <StatisticLine text="good" value={good} />
+          <StatisticLine text="neutral" value={neutral} />
+          <StatisticLine text="bad" value={bad} />
+          <StatisticLine text="all" value={all} />
+          <StatisticLine text="average" value={average} />
+          <StatisticLine text="positive" value={positive} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+
+const Button = (props) => (
+  <button onClick={props.handleClick}>
+    {props.text}
+  </button>
+)
+const App = () => {
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+
+  const setToGood= newValue => {
+    console.log('good', newValue)
+    setGood(newValue)
+  }
+  const setToNeutral = newValue => {
+    console.log('value now', newValue)
+    setNeutral(newValue)
+  }
+  const setToBad = newValue => {
+    console.log('value now', newValue)
+    setBad(newValue)
+  }
+  return (
+    <div>
+      <Display value={'give feedback'} />
+      <Button handleClick={() => setToGood(good+1)} text="good" />
+      <Button handleClick={() => setToNeutral(neutral+1)} text="neutral" />
+      <Button handleClick={() => setToBad(bad + 1)} text="bad" />
+      <Statistics good={good} neutral={neutral} bad={bad}></Statistics>
+
     </div>
   )
 }
 
 export default App
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
